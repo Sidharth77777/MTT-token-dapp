@@ -26,10 +26,10 @@ A fully-featured decentralized application (DApp) for managing the **MTT ERC20 t
 ![Connect Wallet](https://drive.usercontent.google.com/download?id=154cYThhqBHBWM8OiNGmocw0c9oq9CIel&export=view&authuser=0)
 *Connect your MetaMask wallet to get started.*
 
-![Token Dashboard](https://drive.google.com/file/d/1Y3zr1rH3W8LgmVBxxCDaxYQegfhb3Lj9/view?usp=drive_link)
+![Token Dashboard](https://drive.usercontent.google.com/download?id=1Y3zr1rH3W8LgmVBxxCDaxYQegfhb3Lj9&export=view&authuser=0)
 *Mint, burn, transfer, and stake MTT tokens.*
 
-![Recent Transactions](https://drive.google.com/file/d/1uLG_2k5hqTFx5kq8hLj8yXrdPSx-nxKZ/view?usp=drive_link)
+![Recent Transactions](https://drive.usercontent.google.com/download?id=1uLG_2k5hqTFx5kq8hLj8yXrdPSx-nxKZ&export=view&authuser=0)
 *View your latest token transactions.*
 
 ---
