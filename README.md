@@ -21,6 +21,13 @@ A fully-featured decentralized application (DApp) for managing the **MTT ERC20 t
 
 ---
 
+## Requirements
+
+- **MetaMask Wallet:** Ensure you have a MetaMask wallet connected to the Sepolia testnet.
+
+- **Sepolia ETH:** You’ll need some Sepolia ETH for gas fees to interact with the MTT token contract. You can get test ETH from a (Sepolia Faucet)[https://cloud.google.com/application/web3/faucet/ethereum/sepolia]
+---
+
 ## Screenshots
 
 ![Connect Wallet](https://drive.usercontent.google.com/download?id=154cYThhqBHBWM8OiNGmocw0c9oq9CIel&export=view&authuser=0)
