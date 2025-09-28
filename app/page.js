@@ -1,103 +1,175 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { ethers } from "ethers";
+import { TOKEN_ABI, CONTRACT_ADDRESS } from "./constants";
+import Alerts from "./_components/Alerts";
+import TopBar from "./_components/TopBar";
+import WalletInfo from "./_components/WalletInfo";
+import BalanceCard from "./_components/BalanceCard";
+import MintCard from "./_components/MintCard";
+import BurnCard from "./_components/BurnCard";
+import TokenTransfer from "./_components/TokenTransfer";
+import Stakes from "./_components/Stakes";
+import RecentTransactions from "./_components/RecentTransactions";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [account, setAccount] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const [mintAmount, setMintAmount] = useState(null);
+  const [minting, setMinting] = useState(false);
+  const [burnAmount, setBurnAmount] = useState(null);
+  const [burning, setBurning] = useState(false);
+  const [noTokenError, setNoTokenError] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showBurnAlert, setShowBurnAlert] = useState(false);
+  const [showTransferredAlert, setShowTransferredAlert] = useState(false);
+  const [showStakedAlert, setShowStakedAlert] = useState(false);
+  const [showUnStakedAlert, setShowUnStakedAlert] = useState(false);
+  const [claimedAlert, setClaimedAlert] = useState(false);
+  const [showBalanceCard, setShowBalanceCard] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const connectWallet = async () => {
+    if (!window.ethereum) {
+      alert("Please install MetaMask!");
+      return;
+    }
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const accounts = await provider.send("eth_requestAccounts", []);
+
+      setAccount(accounts[0]);
+
+      const newContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        TOKEN_ABI,
+        signer
+      );
+      setContract(newContract);
+
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // SEPOLIA
+      });
+    } catch (err) {
+      console.error("Error connecting wallet:", err);
+    }
+  };
+
+  const getBalance = async () => {
+    if (!contract || !account) return;
+
+    setShowBalanceCard(!showBalanceCard);
+
+    try {
+      const userBalance = await contract.getUserBalance();
+      setBalance(ethers.formatEther(userBalance));
+    } catch (err) {
+      console.error("Error fetching balance:", err);
+    }
+  };
+
+  const mintTokens = async () => {
+    if (!contract || !mintAmount) return;
+
+    try {
+      setMinting(true);
+      const amountInWei = ethers.parseEther(mintAmount);
+      const tx = await contract.mint(amountInWei);
+      await tx.wait();
+      setMinting(false);
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 4000);
+      setMintAmount(0);
+      setNoTokenError(null);
+      getBalance();
+    } catch (err) {
+      console.error("Mint failed ! :");
+    }
+  };
+
+  const BurnTokens = async () => {
+    if (!contract || !burnAmount) return;
+
+    try {
+      const amountInWei = ethers.parseEther(burnAmount);
+      const tx = await contract.burnToken(amountInWei);
+      setBurning(true);
+      await tx.wait();
+      setBurning(false);
+      setShowBurnAlert(true);
+      setTimeout(() => {
+        setShowBurnAlert(false);
+      }, 4000);
+      setNoTokenError(null);
+      setBurnAmount(0);
+      getBalance();
+    } catch (err) {
+      let errorMessage = "Burn failed!";
+      if (err?.reason) {
+        errorMessage = err.reason;
+      }
+
+      setNoTokenError(errorMessage);
+      console.error("Mint failed ! :", err);
+    }
+  };
+
+  const logout = async() => {
+    setAccount(null);
+  setContract(null);
+  setBalance(null);
+  setMintAmount(null);
+  setBurnAmount(null);
+  setNoTokenError(null);
+  setShowAlert(false);
+  setShowBurnAlert(false);
+  }
+
+  return (
+<div className="relative min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 flex flex-col items-center justify-start py-10 px-4">
+  
+  <Alerts showAlert={showAlert} showBurnAlert={showBurnAlert} showTransferredAlert={showTransferredAlert} showStakedAlert={showStakedAlert} showUnStakedAlert={showUnStakedAlert} claimedAlert={claimedAlert} />
+
+  <TopBar account={account} />
+
+  <WalletInfo account={account} connectWallet={connectWallet} logout={logout} />
+
+  <BalanceCard account={account} getBalance={getBalance} balance={balance} showBalanceCard={showBalanceCard} />
+
+  <div className="flex justify-center items-center sm:flex-nowrap flex-wrap gap-5 max-w-6xl w-full mx-auto px-10">
+
+    <div className="w-full sm:w-1/2">
+  <MintCard account={account} mintAmount={mintAmount} setMintAmount={setMintAmount} mintTokens={mintTokens} minting={minting} /> 
     </div>
+
+    <div className="w-full sm:w-1/2">
+  <BurnCard noTokenError={noTokenError} account={account} burnAmount={burnAmount} setBurnAmount={setBurnAmount} BurnTokens={BurnTokens} burning={burning} />
+    </div>
+
+  </div>
+
+   <div className="flex justify-center items-center mt-5">
+    <TokenTransfer account={account} contract={contract} setShowTransferredAlert={setShowTransferredAlert} />
+  </div> 
+
+  <div className="flex justify-center items-center mt-5 mx-5">
+    <Stakes account={account} contract={contract} setShowStakedAlert={setShowStakedAlert} setShowUnStakedAlert={setShowUnStakedAlert} setClaimedAlert={setClaimedAlert} />
+  </div>
+
+  <div className="flex justify-center items-center mt-10 mx-5">
+    <RecentTransactions account={account} />
+  </div>
+
+
+  
+
+
+  </div>
   );
 }
