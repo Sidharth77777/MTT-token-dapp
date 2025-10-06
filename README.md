@@ -14,7 +14,7 @@ A fully-featured decentralized application (DApp) for managing the **MTT ERC20 t
 - **Burn Tokens:** Burn your MTT tokens.
 - **Transfer Tokens:** Send MTT tokens to another wallet.
 - **Staking:** Stake MTT tokens to earn rewards.
-- **Unstaking:** Withdraw your staked tokens (full or partial) along with rewards.
+- **Unstaking:** Withdraw your staked tokens along with rewards.
 - **Claim Rewards:** Claim accrued staking rewards.
 - **Recent Transactions:** View your last 10 transactions with type, amount, and timestamp.
 - **Explorer Links:** Check all token activity directly on [Etherscan](https://sepolia.etherscan.io/).
