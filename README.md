@@ -89,7 +89,7 @@ NEXT_PUBLIC_ETHERSCAN_API_KEY=<Your Etherscan API Key>
 npm run dev
 ```
 
-5. Open http://localhost:3000 in your browser
+5. Open https://localhost:3000 in your browser
 
 
 ### Contributing
