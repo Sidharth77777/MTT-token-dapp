@@ -2,7 +2,7 @@
 
 [Live Demo](https://mtt-token-dapp.vercel.app/)
 
-A fully-featured decentralized application (DApp) for managing the **MTT ERC20 token** on the Ethereum Sepolia testnet. This DApp allows users to interact with the MTT token smart contract directly from their browser using MetaMask.
+A fully-featured decentralized application (DApp) for managing the **MTT ERC20 token** on the Ethereum Sepolia testnet. This DApp allows users to interact with the MTT token smart contract directly from their browser using MetaMask
 
 ---
 
