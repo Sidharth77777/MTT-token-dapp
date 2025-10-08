@@ -8,11 +8,11 @@ A fully-featured decentralized application (DApp) for managing the **MTT ERC20 t
 
 ## Features
 
-- **Connect Wallet:** Connect your MetaMask wallet to the DApp.
-- **View Token Balance:** See your current MTT token balance.
-- **Mint Tokens:** Mint new MTT tokens to your wallet.
+- **Connect Wallet:** Connect your MetaMask wallet to the DApp
+- **View Token Balance:** See your current MTT token balance
+- **Mint Tokens:** Mint new MTT tokens to your wallet
 - **Burn Tokens:** Burn your MTT tokens.
-- **Transfer Tokens:** Send MTT tokens to another wallet.
+- **Transfer Tokens:** Send MTT tokens to another wallet
 - **Staking:** Stake MTT tokens to earn rewards.
 - **Unstaking:** Withdraw your staked tokens along with rewards.
 - **Claim Rewards:** Claim accrued staking rewards.
